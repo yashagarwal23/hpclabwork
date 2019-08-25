@@ -9,7 +9,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/wait.h>
-#include <errno.h>
 
 #define PERMS 0666
 #define SHARED_MEM_SIZE 4
@@ -39,22 +38,15 @@ void semsignal(int semid, int semn)
 int main(int argc, char* argv[])
 {
     int semid = semget(semkey, 0, 0);
-    // printf("%d\n", semid);
     int shmid = shmget(shmkey, SHARED_MEM_SIZE, 0666);
     int *shm = (int *)shmat(shmid, NULL, 0);
 
     printf("inside consumer\n");
     for(int i = 1; i <= 10; i++)
     {
-        // int v1 = semctl(semid, 0, GETVAL);
-        // int v2 = semctl(semid, 1, GETVAL);
-        // printf("values : %d, %d", v1, v2);
         semwait(semid, 1);
         printf("consumer consumed : %d\n", *shm);
         semsignal(semid, 0);
-        // v1 = semctl(semid, 0, GETVAL);
-        // v2 = semctl(semid, 1, GETVAL);
-        // printf("values : %d, %d", v1, v2);
         sleep(5);
     }
     printf("exiting consumer\n");
