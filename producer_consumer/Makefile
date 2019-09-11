@@ -11,3 +11,7 @@ consumer: consumer.c
 
 clean:
 	rm -f parent consumer producer
+
+thread:
+	gcc producer_consumer_thread.c -o producer_consumer_thread -lpthread
+

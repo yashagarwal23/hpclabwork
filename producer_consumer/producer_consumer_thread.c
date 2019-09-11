@@ -11,7 +11,7 @@
 #define PERMS 0666
 #define NUM 10
 
-int value = 10;;
+int value = 10;
 sem_t* prod_sem, *cons_sem;
 
 void* producer_function()
@@ -23,7 +23,7 @@ void* producer_function()
         printf("producer produced : %d \n", x);
         value = x;
         sem_post(cons_sem);
-        sleep(3);
+        sleep(1);
     }
 }
 
@@ -34,14 +34,16 @@ void* consumer_function()
         sem_wait(cons_sem);
         printf("consumer consumed : %d\n", value);
         sem_post(prod_sem);
-        sleep(5);
+        sleep(2);
     }
 }
 
 int main()
 {
-    prod_sem = sem_open(PROD_SEM_NAME, O_CREAT, PERMS, 1);
-    cons_sem = sem_open(CONS_SEM_NAME, O_CREAT, PERMS, 0);
+    prod_sem = sem_open(PROD_SEM_NAME, O_CREAT);
+    sem_init(prod_sem, 0, 1);
+    cons_sem = sem_open(CONS_SEM_NAME, O_CREAT);
+    sem_init(cons_sem, 0, 0);
 
     pthread_t producer, consumer;
     pthread_attr_t attr;
