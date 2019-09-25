@@ -7,6 +7,7 @@
 #include <sys/wait.h>
 #include <sys/sem.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #define PERMS (IPC_CREAT | 0666)
 #define SHARED_MEM_SIZE 4
@@ -33,11 +34,20 @@ int main()
 
     shmid = shmget(shmkey, SHARED_MEM_SIZE, PERMS);
 
-    FILE* producer = popen("gnome-terminal --disable-factory --command=./producer", "r");
-    FILE* consumer = popen("gnome-terminal --disable-factory --command=./consumer", "r");
-
-    pclose(producer);
-    pclose(consumer);
+    pid_t producer = fork();
+    if(producer == 0)
+    {
+        char* argv[] = {"/usr/bin/gnome-terminal", "gnome-terminal", "--disable-factory", "--command=./producer", NULL};
+        execv(argv[0], argv);
+    }
+    pid_t consumer = fork();
+    if(consumer == 0)
+    {
+        char* argv[] = {"/usr/bin/gnome-terminal", "gnome-terminal", "--disable-factory", "--command=./consumer", NULL};
+        execv(argv[0], argv);
+    }
+    waitpid(producer, NULL, 0);
+    waitpid(consumer, NULL, 0);
 
     shmctl(shmid, 0, IPC_RMID);
     semctl(semid, 0, IPC_RMID);

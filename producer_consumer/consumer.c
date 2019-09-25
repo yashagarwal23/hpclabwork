@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
         semwait(semid, 1);
         printf("consumer consumed : %d\n", *shm);
         semsignal(semid, 0);
-        sleep(5);
+        sleep(3);
     }
     printf("exiting consumer\n");
     return 0;

@@ -49,7 +49,6 @@ int main(int argc, char *argv[])
         printf("producer produced : %d\n", x);
         *shm = x;
         semsignal(semid, 1);
-        sleep(3);
     }
     printf("exiting producer\n");
     return 0;

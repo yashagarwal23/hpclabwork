@@ -120,15 +120,12 @@ float get_greedy_path(string start_state,
 
 int main(int argc, char *argv[])
 {
-    // string a = "1010";
-    // string b = "1010";
-    // cout << get_new_state(a, b, 1) << endl;
-    // if(argc < 2)
-    // {
-    //     exit(-1);
-    // }
-    // string filename(argv[1]);
-    string filename = "table.csv";
+    if(argc < 2)
+    {
+        printf("Enter the reservation table file name\n");
+        exit(-1);
+    }
+    string filename(argv[1]);
     fstream reader;
     reader.open(filename, ios::in | ios::out);
     string row;
@@ -162,7 +159,6 @@ int main(int argc, char *argv[])
     cout << "forbidden latencies : ";
     for (int i = 0; i < forb_latencies.size(); i++)
         cout << forb_latencies[i] << " ";
-    // cout << endl << endl;
 
     drawline();
     cout << "Permissible Latencies : ";
@@ -171,7 +167,6 @@ int main(int argc, char *argv[])
         if (find(forb_latencies.begin(), forb_latencies.end(), i) == forb_latencies.end())
             perm_latencies.push_back(i), cout << i << " ";
     }
-    // cout << endl << endl;
 
     string collision_vector(*max_element(forb_latencies.begin(), forb_latencies.end()), '0');
     for (int i = 0; i < forb_latencies.size(); i++)
@@ -222,13 +217,6 @@ int main(int argc, char *argv[])
         cout << it->first << " : " << it->second << endl;
     cout << endl;
 
-    // for_each(next_state_map.begin(), next_state_map.end(), [](auto it) -> void
-    // {
-    //     sort((it->second).begin(), (it->second).end(), [](const pair<string, int>& p1, const pair<string, int>& p2) -> bool{
-    //         return p1.second > p2.second;
-    //     });
-    // });
-
     for (auto it = next_state_map.begin(); it != next_state_map.end(); it++)
     {
         cout << state_name_map[it->first] << " -> ";
@@ -238,9 +226,6 @@ int main(int argc, char *argv[])
     }
 
     // SIMPLE CYCLES
-    // for_each(state_name_map.begin(), state_name_map.end(), [](auto it){
-    //     print_simple_path(it->first, next_state_map);
-    // });
 
     drawline();
     cout << "Simple Cycles" << endl;
@@ -256,13 +241,5 @@ int main(int argc, char *argv[])
     drawline();
     cout << "Minimum Average Latency : " << mal << endl;
 
-    // for(vector<string> row : table)
-    // {
-    //     for(string sym : row)
-    //     {
-    //         cout << sym << " ";
-    //     }
-    //     cout << endl;
-    // }
     return 0;
 }
