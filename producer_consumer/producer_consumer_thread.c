@@ -9,7 +9,7 @@
 #define PROD_SEM_NAME "produced"
 #define CONS_SEM_NAME "consumer"
 #define PERMS 0666
-#define NUM 10
+#define NUM 1
 
 int value = 10;
 sem_t* prod_sem, *cons_sem;
@@ -40,9 +40,9 @@ void* consumer_function()
 
 int main()
 {
-    prod_sem = sem_open(PROD_SEM_NAME, O_CREAT);
+    prod_sem = sem_open(PROD_SEM_NAME, O_CREAT, PERMS, 0);
     sem_init(prod_sem, 0, 1);
-    cons_sem = sem_open(CONS_SEM_NAME, O_CREAT);
+    cons_sem = sem_open(CONS_SEM_NAME, O_CREAT, PERMS, 1);
     sem_init(cons_sem, 0, 0);
 
     pthread_t producer, consumer;
@@ -52,6 +52,9 @@ int main()
     pthread_create(&consumer, &attr, consumer_function, NULL);
     pthread_join(producer, NULL);
     pthread_join(consumer, NULL);
+
+    sem_close(prod_sem);
+    sem_close(cons_sem);
 
     return 0;
 }
