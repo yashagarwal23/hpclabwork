@@ -9,7 +9,7 @@
 #define PROD_SEM_NAME "produced"
 #define CONS_SEM_NAME "consumer"
 #define PERMS 0666
-#define NUM 1
+#define NUM 10
 
 int value = 10;
 sem_t* prod_sem, *cons_sem;
