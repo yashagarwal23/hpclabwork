@@ -38,11 +38,7 @@ int main()
     for (int i = 0; i < n; i++)
         cin >> arr[i];
 
-    pthread_attr_t attr;
     pthread_mutex_init(&sum_mutex, NULL);
-
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 
     pthread_t threads[NUM_THREADS];
     int tids[NUM_THREADS];
@@ -55,8 +51,7 @@ int main()
         pthread_join(threads[i], NULL);
 
     cout << "sum : " << answer << endl;
-
-    pthread_attr_destroy(&attr);
+    
     pthread_mutex_destroy(&sum_mutex);
 
     return 0;
